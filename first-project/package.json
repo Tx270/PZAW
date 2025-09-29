@@ -1,0 +1,19 @@
+{
+  "name": "first-project",
+  "version": "1.0.0",
+  "description": "Pierwszy projekt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tx270/PZAW.git"
+  },
+  "author": "Tx270",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tx270/PZAW/issues"
+  },
+  "homepage": "https://github.com/Tx270/PZAW#readme"
+}
