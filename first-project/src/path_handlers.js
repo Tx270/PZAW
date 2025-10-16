@@ -20,6 +20,14 @@ const pathConfigs = [
       res.end(favicon);
     },
   },
+  {
+    path: "/hellow",
+    allowed_methods: ["GET"],
+    handler: (req, res) => {
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end("hi~");
+    },
+  },
 ];
 
 export function handlePath(path, req, res) {
