@@ -1,0 +1,72 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h4 class="mb-0">Upload Sample</h4>
+        </div>
+
+        <div class="card-body">
+          <form action="/upload" method="post">
+
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="author" class="form-label">Author</label>
+              <input type="text" class="form-control" id="author" name="author" required>
+            </div>
+
+<div class="mb-3">
+  <label for="key" class="form-label">Key</label>
+  <select class="form-select" id="key" name="key" required>
+    <option value="">Choose key</option>
+    <option value="Cmaj">Cmaj</option>
+    <option value="Cmin">Cmin</option>
+    <option value="C#maj">C#maj</option>
+    <option value="C#min">C#min</option>
+    <option value="Dmaj">Dmaj</option>
+    <option value="Dmin">Dmin</option>
+    <option value="D#maj">D#maj</option>
+    <option value="D#min">D#min</option>
+    <option value="Emaj">Emaj</option>
+    <option value="Emin">Emin</option>
+    <option value="Fmaj">Fmaj</option>
+    <option value="Fmin">Fmin</option>
+    <option value="F#maj">F#maj</option>
+    <option value="F#min">F#min</option>
+    <option value="Gmaj">Gmaj</option>
+    <option value="Gmin">Gmin</option>
+    <option value="G#maj">G#maj</option>
+    <option value="G#min">G#min</option>
+    <option value="Amaj">Amaj</option>
+    <option value="Amin">Amin</option>
+    <option value="A#maj">A#maj</option>
+    <option value="A#min">A#min</option>
+    <option value="Bmaj">Bmaj</option>
+    <option value="Bmin">Bmin</option>
+    <option value="N/A">N/A</option>
+  </select>
+</div>
+
+            <div class="mb-3">
+              <label for="tempo" class="form-label">Tempo (BPM)</label>
+              <input type="number" class="form-control" id="tempo" name="tempo" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Description (optional)</label>
+              <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Upload</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
