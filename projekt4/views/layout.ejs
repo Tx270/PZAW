@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2">
           <a href="/samples" class="navbar-brand fs-3">OpenSamples</a>
@@ -21,21 +21,26 @@
           </form>
         </div>
 
-        <div>
-          <a href="/random" class="btn btn-sm btn-secondary">
-            Random
-          </a>
-          <a href="/upload" class="btn btn-sm btn-secondary">
-            Upload
-          </a>
+        <div class="d-flex align-items-center gap-2">
+          <a href="/random" class="btn btn-sm btn-secondary">Random</a>
+          <a href="/upload" class="btn btn-sm btn-secondary">Upload</a>
+
+          <% if (locals.session && locals.session.user_id != null) { %>
+            <a href="/profile">
+              <img src="/img/avatar.png" alt="Profile" width="32" height="32" class="rounded-circle ms-1" style="object-fit: cover;">
+            </a>
+          <% } else { %>
+            <a href="/auth/login" class="btn btn-sm btn-outline-light">Log in</a>
+            <a href="/auth/signup" class="btn btn-sm btn-primary">Sign up</a>
+          <% } %>
         </div>
     </div>
-</nav>
+  </nav>
 
-<main class="container">
+  <main class="container">
     <%- body %>
-</main>
+  </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

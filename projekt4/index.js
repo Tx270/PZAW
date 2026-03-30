@@ -1,18 +1,43 @@
 import express from "express";
 import expressLayouts from "express-ejs-layouts";
-import { getDB } from "./db.js";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
-const port = 8000;
+import { getDB } from "./db.js";
+import auth from "./controllers/auth.js";
+import session from "./models/session.js";
+import user from "./models/user.js";
 
 const app = express();
+
+const port = process.env.PORT || 8000;
+const SECRET = process.env.SECRET;
+if (SECRET == null) {
+  console.error(
+    `SECRET environment variable missing.
+     Please create an env file or provide SECRET via environment variables.`,
+  );
+  process.exit(1);
+}
 
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(express.static("public"));
+app.use(express.urlencoded());
+app.use(morgan("dev"));
+app.use(cookieParser(SECRET));
 app.use(express.urlencoded({ extended: true }));
 app.set("views", "views");
+app.use(session.sessionHandler);
 
+const authRouter = express.Router();
+authRouter.get("/login",   auth.login_get);
+authRouter.post("/login",  auth.login_post);
+authRouter.get("/signup",  auth.signup_get);
+authRouter.post("/signup", auth.signup_post);
+authRouter.get("/logout",  auth.logout);
+app.use("/auth", authRouter);
 
 app.get("/", (_req, res) => {
     res.redirect("/samples");
@@ -69,6 +94,16 @@ app.get("/random", async (_req, res) => {
     if (!row) return res.status(404).send("No samples found");
 
     res.redirect("/samples/" + row.id);
+});
+
+
+// strona urzytkownika
+app.get("/profile", async (req, res) => {
+  if (res.locals.session?.user_id == null) {
+    return res.redirect("/auth/login");
+  }
+  const u = user.getUser(res.locals.session.user_id);
+  res.render("profile", { user: u });
 });
 
 

@@ -1,11 +1,30 @@
-<%- include("head.partial.ejs") %>
+<div class="auth-container">
+  <h1>Sign up</h1>
 
-<main>
-  <h1><%= title %></h1>
-  <div>
-    <%- include("forms/generic.ejs", form) %>
-  </div>
-  <span>Masz już konto? <a href="/auth/login">Zaloguj się!</a></span>
-</main>
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
 
-<%- include("foot.partial.ejs") %>
+  <form method="POST" action="/auth/signup">
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="username" required />
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" />
+    </div>
+
+    <div class="field">
+      <label for="password_confirm">Confirm password</label>
+      <input type="password" id="password_confirm" name="password_confirm" autocomplete="new-password" required minlength="8" />
+    </div>
+
+    <button type="submit">Create account</button>
+  </form>
+
+  <p class="auth-switch">
+    Already have an account? <a href="/auth/login">Log in</a>
+  </p>
+</div>
