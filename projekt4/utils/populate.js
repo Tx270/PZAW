@@ -46,7 +46,7 @@ const descriptions = [
 async function main() {
   await user.createUser("Marcel", "qwertyuio");
   await user.createUser("Lex", "asdfghjkl");
-  await user.createUser("admin", "admin");
+  await user.createUser("admin", "zxcvbnm");
   user.setAdmin("admin");
   console.log("Dodano użytkowników");
 
