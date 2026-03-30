@@ -3,7 +3,7 @@ import expressLayouts from "express-ejs-layouts";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
-import { getDB } from "./db.js";
+import getDB from "./db.js";
 import auth from "./controllers/auth.js";
 import session from "./models/session.js";
 import user from "./models/user.js";
@@ -56,7 +56,12 @@ async function requireOwner(req, res) {
     res.status(404).send("Sample not found");
     return null;
   }
-  if (Number(sample.user_id) !== Number(res.locals.session.user_id)) {
+
+  const u = user.getUser(Number(res.locals.session.user_id));
+  const isOwner = Number(sample.user_id) === Number(res.locals.session.user_id);
+  const isAdmin = u?.is_admin === 1;
+
+  if (!isOwner && !isAdmin) {
     res.status(403).send("Forbidden");
     return null;
   }
@@ -89,18 +94,17 @@ app.get("/samples", async (req, res) => {
 // to widok szczegółowy dla sampla
 app.get("/samples/:id", async (req, res) => {
     const db = await getDB();
-    const id = req.params.id;
+    const sample = await db.get("SELECT * FROM samples WHERE id = ?", [req.params.id]);
 
-    const sample = await db.get(
-        "SELECT * FROM samples WHERE id = ?",
-        [id]
-    );
+    if (!sample) return res.status(404).send("File not found");
 
-    if (!sample) {
-        return res.status(404).send("File not found");
+    let isAdmin = false;
+    if (res.locals.session?.user_id != null) {
+      const u = user.getUser(Number(res.locals.session.user_id));
+      isAdmin = u?.is_admin === 1;
     }
 
-    res.render("details", { sample });
+    res.render("details", { sample, isAdmin });
 });
 
 

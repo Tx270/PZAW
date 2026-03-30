@@ -22,7 +22,8 @@ db.exec(`
     user_id              INTEGER PRIMARY KEY,
     username             TEXT UNIQUE,
     passhash             TEXT,
-    created_at           INTEGER
+    created_at           INTEGER,
+    is_admin             INTEGER DEFAULT 0
   ) STRICT;
   `);
 
@@ -31,7 +32,7 @@ const db_ops = {
     "INSERT INTO users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING user_id;",
   ),
   get_user: db.prepare(
-    "SELECT user_id, username, created_at FROM users WHERE user_id = ?;",
+    "SELECT user_id, username, created_at, is_admin FROM users WHERE user_id = ?;",
   ),
   find_by_username: db.prepare(
     "SELECT user_id, username, created_at FROM users WHERE username = ?;",

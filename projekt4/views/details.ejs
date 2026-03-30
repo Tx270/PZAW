@@ -19,7 +19,7 @@
             <a href="/samples/<%= sample.id %>/download"
                class="btn btn-secondary btn-sm w-50">Download</a>
           </div>
-          <% if (locals.session && locals.session.user_id && locals.session.user_id == sample.user_id) { %>
+          <% if (locals.session && locals.session.user_id && (locals.session.user_id == sample.user_id || isAdmin)) { %>
           <div class="d-flex gap-2 m-1">
             <a href="/samples/<%= sample.id %>/edit"
                class="btn btn-secondary btn-sm w-50">Edit</a>

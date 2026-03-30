@@ -65,17 +65,7 @@ function sessionHandler(req, res, next) {
     session = createSession(null, res);
   }
 
-  setImmediate(printUserSession);
-
   next();
-
-  function printUserSession() {
-    console.info(
-      "Session:", session.session_id,
-      "user:", session.user_id,
-      "created at:", new Date(Number(session.created_at)).toISOString()
-    );
-  }
 }
 
 export default {
