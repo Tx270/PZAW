@@ -1,0 +1,33 @@
+<h1 class="mb-4">All our samples</h1>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <% samples.forEach(s => { %>
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+              <img src="/img/wave.svg" class="card-img-top" alt="waveform">
+
+              <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="/samples/<%= s.id %>" class="text-dark text-decoration-none" style="cursor: pointer;">
+                      <%= s.name %>
+                    </a>
+                  </h5>
+                  <p class="card-text small text-muted">
+                      <strong><%= s.author %></strong><br>
+                      Key: <%= s.key %><br>
+                      Tempo: <%= s.tempo %> BPM
+                  </p>
+              </div>
+
+              <div class="card-footer d-flex gap-2">
+                <a href="/samples/<%= s.id %>/play" class="btn btn-primary btn-sm w-50">
+                  Play
+                </a>
+                <a href="/samples/<%= s.id %>/download" class="btn btn-secondary btn-sm w-50">
+                  Download
+                </a>
+              </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
