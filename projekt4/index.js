@@ -44,6 +44,26 @@ app.get("/", (_req, res) => {
 });
 
 
+// helper zwracjący sample jeśli należy do zalogowanego użytkownika
+async function requireOwner(req, res) {
+  if (res.locals.session?.user_id == null) {
+    res.redirect("/auth/login");
+    return null;
+  }
+  const db = await getDB();
+  const sample = await db.get("SELECT * FROM samples WHERE id = ?", [req.params.id]);
+  if (!sample) {
+    res.status(404).send("Sample not found");
+    return null;
+  }
+  if (Number(sample.user_id) !== Number(res.locals.session.user_id)) {
+    res.status(403).send("Forbidden");
+    return null;
+  }
+  return sample;
+}
+
+
 // to lista wszystkich sampli z filtrowaniem po search query
 app.get("/samples", async (req, res) => {
     const db = await getDB();
@@ -150,46 +170,47 @@ app.get("/samples/:id/download", async (req, res) => {
 
 
 app.get("/upload", async (_req, res) => {
-    res.render("upload");
+  if (res.locals.session?.user_id == null) {
+    return res.redirect("/auth/login");
+  }
+  res.render("upload");
 });
 
 app.post("/upload", async (req, res) => {
-    try {
-        const db = await getDB();
+  if (res.locals.session?.user_id == null) {
+    return res.redirect("/auth/login");
+  }
+  try {
+      const db = await getDB();
 
-        const { name, author, key, tempo, description } = req.body;
+      const { name, author, key, tempo, description } = req.body;
 
-        if (!name || !author || !key || !tempo) {
-            return res.status(400).send("Missing required fields");
-        }
+      if (!name || !author || !key || !tempo) {
+          return res.status(400).send("Missing required fields");
+      }
 
-        await db.run(
-            `INSERT INTO samples (name, author, key, tempo, description, created_at)
-             VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
-            [name, author, key, parseInt(tempo), description || null]
-        );
+      await db.run(
+          `INSERT INTO samples (name, author, key, tempo, description, created_at, user_id)
+           VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)`,
+          [name, author, key, parseInt(tempo), description || null, Number(res.locals.session.user_id)]
+      );
 
-        res.redirect("/samples");
+      res.redirect("/samples");
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Server error");
-    }
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error");
+  }
 });
 
 
 app.get("/samples/:id/delete", async (req, res) => {
   try {
+    const sample = await requireOwner(req, res);
+    if (!sample) return;
+
     const db = await getDB();
-    const id = req.params.id;
-
-    const sample = await db.get("SELECT * FROM samples WHERE id = ?", [id]);
-    if (!sample) {
-      return res.status(404).send("Sample not found");
-    }
-
-    await db.run("DELETE FROM samples WHERE id = ?", [id]);
-
+    await db.run("DELETE FROM samples WHERE id = ?", [sample.id]);
     res.redirect("/samples");
   } catch (err) {
     console.error(err);
@@ -197,16 +218,10 @@ app.get("/samples/:id/delete", async (req, res) => {
   }
 });
 
-
 app.get("/samples/:id/edit", async (req, res) => {
   try {
-    const db = await getDB();
-    const id = req.params.id;
-
-    const sample = await db.get("SELECT * FROM samples WHERE id = ?", [id]);
-    if (!sample) {
-      return res.status(404).send("Sample not found");
-    }
+    const sample = await requireOwner(req, res);
+    if (!sample) return;
 
     res.render("edit", { sample });
   } catch (err) {
@@ -215,30 +230,22 @@ app.get("/samples/:id/edit", async (req, res) => {
   }
 });
 
-
 app.post("/samples/:id/edit", async (req, res) => {
   try {
-    const db = await getDB();
-    const id = req.params.id;
-    const { name, author, key, tempo, description } = req.body;
+    const sample = await requireOwner(req, res);
+    if (!sample) return;
 
+    const { name, author, key, tempo, description } = req.body;
     if (!name || !author || !key || !tempo) {
       return res.status(400).send("Missing required fields");
     }
 
-    const sample = await db.get("SELECT * FROM samples WHERE id = ?", [id]);
-    if (!sample) {
-      return res.status(404).send("Sample not found");
-    }
-
+    const db = await getDB();
     await db.run(
-      `UPDATE samples
-       SET name = ?, author = ?, key = ?, tempo = ?, description = ?
-       WHERE id = ?`,
-      [name, author, key, parseInt(tempo), description || null, id]
+      `UPDATE samples SET name = ?, author = ?, key = ?, tempo = ?, description = ? WHERE id = ?`,
+      [name, author, key, parseInt(tempo), description || null, sample.id]
     );
-
-    res.redirect("/samples/" + id);
+    res.redirect("/samples/" + sample.id);
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");

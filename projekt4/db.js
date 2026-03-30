@@ -16,6 +16,7 @@ export async function getDB() {
             tempo INTEGER NOT NULL,
             description TEXT,
             created_at TEXT NOT NULL,
+            user_id INTEGER,
             file TEXT
         );
     `);

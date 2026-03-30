@@ -23,9 +23,9 @@
 
         <div class="d-flex align-items-center gap-2">
           <a href="/random" class="btn btn-sm btn-secondary">Random</a>
-          <a href="/upload" class="btn btn-sm btn-secondary">Upload</a>
 
           <% if (locals.session && locals.session.user_id != null) { %>
+            <a href="/upload" class="btn btn-sm btn-secondary">Upload</a>
             <a href="/profile">
               <img src="/img/avatar.png" alt="Profile" width="32" height="32" class="rounded-circle ms-1" style="object-fit: cover;">
             </a>
