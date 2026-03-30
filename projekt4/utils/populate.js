@@ -1,5 +1,5 @@
-import user from "./models/user.js";
-import sample from "./models/sample.js";
+import user from "../models/user.js";
+import sample from "../models/sample.js";
 
 function randomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)];

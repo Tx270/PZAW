@@ -79,4 +79,5 @@ export default {
   createUser,
   validatePassword,
   getUser,
+  setAdmin,
 };
