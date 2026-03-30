@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "populate": "node populate.js"
+    "setup": "node utils/generate_env.js > .env",
+    "populate": "node --env-file=.env populate.js",
+    "start": "node --env-file=.env index.js"
   },
   "author": "Tx270",
   "license": "ISC",

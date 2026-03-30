@@ -31,6 +31,9 @@ const db_ops = {
   create_user: db.prepare(
     "INSERT INTO users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING user_id;",
   ),
+  set_admin: db.prepare(
+    "UPDATE users SET is_admin = 1 WHERE username = ?;"
+  ),
   get_user: db.prepare(
     "SELECT user_id, username, created_at, is_admin FROM users WHERE user_id = ?;",
   ),
@@ -66,6 +69,10 @@ export async function validatePassword(username, password) {
 
 export function getUser(user_id) {
   return db_ops.get_user.get(user_id);
+}
+
+export function setAdmin(username) {
+  return db_ops.set_admin.run(username);
 }
 
 export default {
