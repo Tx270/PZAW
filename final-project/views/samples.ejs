@@ -4,8 +4,6 @@
     <% samples.forEach(s => { %>
         <div class="col">
             <div class="card h-100 shadow-sm">
-              <img src="/img/wave.svg" class="card-img-top" alt="waveform">
-
               <div class="card-body">
                   <h5 class="card-title">
                     <a href="/samples/<%= s.id %>" class="text-dark text-decoration-none" style="cursor: pointer;">
@@ -19,11 +17,9 @@
                   </p>
               </div>
 
-              <div class="card-footer d-flex gap-2">
-                <a href="/samples/<%= s.id %>/play" class="btn btn-primary btn-sm w-50">
-                  Play
-                </a>
-                <a href="/samples/<%= s.id %>/download" class="btn btn-secondary btn-sm w-50">
+              <div class="card-footer">
+                <audio controls src="/samples/<%= s.id %>/play" class="w-100"></audio>
+                <a href="/samples/<%= s.id %>/download" class="btn btn-secondary btn-sm w-100 mt-2">
                   Download
                 </a>
               </div>
