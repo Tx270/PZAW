@@ -23,8 +23,8 @@ const db_ops = {
   search:         db.prepare("SELECT * FROM samples WHERE name LIKE ? ORDER BY created_at DESC;"),
   get:            db.prepare("SELECT * FROM samples WHERE id = ?;"),
   random:         db.prepare("SELECT id FROM samples ORDER BY RANDOM() LIMIT 1;"),
-  insert:         db.prepare(`INSERT INTO samples (name, author, key, tempo, description, created_at, user_id)
-                              VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?);`),
+  insert:         db.prepare(`INSERT INTO samples (name, author, key, tempo, description, data, mimetype, created_at, user_id)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?);`),
   update:         db.prepare(`UPDATE samples SET name = ?, author = ?, key = ?, tempo = ?, description = ?
                               WHERE id = ?;`),
   delete:         db.prepare("DELETE FROM samples WHERE id = ?;"),

@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h4 class="mb-0">Edit Sample</h4>
+        </div>
+
+        <div class="card-body">
+          <form action="/samples/<%= sample.id %>/edit" method="post">
+
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" value="<%= sample.name %>" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="author" class="form-label">Author</label>
+              <input type="text" class="form-control" id="author" name="author" value="<%= sample.author %>" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="key" class="form-label">Key</label>
+              <select class="form-select" id="key" name="key" required>
+                <option value="">Choose key</option>
+                <% const keys = ["Cmaj","Cmin","C#maj","C#min","Dmaj","Dmin","D#maj","D#min","Emaj","Emin","Fmaj","Fmin","F#maj","F#min","Gmaj","Gmin","G#maj","G#min","Amaj","Amin","A#maj","A#min","Bmaj","Bmin","N/A"]; %>
+                <% keys.forEach(k => { %>
+                  <option value="<%= k %>" <%= k === sample.key ? "selected" : "" %>><%= k %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="tempo" class="form-label">Tempo (BPM)</label>
+              <input type="number" class="form-control" id="tempo" name="tempo" value="<%= sample.tempo %>" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Description (optional)</label>
+              <textarea class="form-control" id="description" name="description" rows="3"><%= sample.description %></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
