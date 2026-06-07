@@ -1,0 +1,13 @@
+- README:
+- README zawiera wszystkie niezbędne informacje
+- Mógłbyś ewentualnie udokumentować obsługiwane ścieżki, ale to detal
+- UX:
+- Wizualnie jest bardzo dobrze i spójnie
+- Mógłbym się tylko przyczepić tego, żeby pola w formularzach były wyrównane
+- Funkcjonalność:
+- Niepokojąca jest liczba przedawnionych modułów instalowanych podczas npm install, spróbowałbym się ich pozbyć
+- KOD:
+- Bardzo dobrze napisany kod
+- Rozszerzenie .js dla generate_env jest mylące
+- Doceniam żart z nazwą cookie od sesji
+- Powtórzenia stałej SESSION_COOKIE w auth.js to potencjalny problem w utrzymaniu. Albo wyeksportowałbym to z modelu session, albo zaoferował dodatkową funkcję interfejsową deleteSession

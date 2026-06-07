@@ -1,0 +1,62 @@
+Plusy:
+- Projekt jest chyba najczytelniej podzielony na warstwy ze wszystkich które widziałem pod względem struktury, łatwo jest śledzić przepływ danych i odpowiedzialności poszczególnych modułów
+- Hasła użytkowników są przechowywane przy użyciu Argon2 jeszcze z dodatkowym Pepperem, co stanowi mega zabezpieczenie przed wyciekiem bazy danych
+- Zapytania SQL korzystają z prepared statements, więc projekt nie jest podatny na klasyczne SQL Injection
+- Dane wyświetlane w widokach EJS są renderowane przy użyciu `<%= %>`, co eliminuje w większości ryzyko XSS
+
+Problemy:
+
+1.
+Najważniejsze chyba, projekt nie uruchamia się na świeżej kopii z repozytorium -> final-project.
+Aktualna wersja zawiera niespójność pomiędzy definicją tabeli `samples` a wykonywanymi zapytaniami SQL - Tabela tworzona jest z kolumną `file`, natomiast później aplikacja przygotowuje zapytania korzystające z kolumn `data` oraz `mimetype`, które nie istnieją w zdefiniowanym schemacie.
+
+Powoduje to błąd
+`Error: table samples has no column named data`
+i uniemożliwia uruchomienie aplikacji na czystej instalacji.
+
+Polecam sprawdzić czy do repo nie została przypadkowo dodana nieaktualna wersja bazy danych.
+(Reszta problemów jest wyszukiwana z kodu, więc nie obiecuje że wszystko się będzie zgadzało)
+
+2.
+Endpoint:
+`GET /samples/:id/delete`
+powoduje natychmiastowe usunięcie sampla.
+
+Jest to problem, ponieważ żądania GET powinny być bezpieczne i nie zmieniać stanu aplikacji, link może zostać przypadkowo odwiedzony przez użytkownika, prefetcher przeglądarki lub osadzony na zewnętrznej stronie.
+
+Proponowałbym zamienić usuwanie na metodę POST lub DELETE iii wykonywać je z formularza
+
+3.
+Podobnie było u Bartusia:
+- logowanie,
+- rejestracja,
+- upload plików,
+- edycja sampli,
+nie posiadają żadnego mechanizmu CSRF - polecałbym dodać tokeny CSRF do formularzy i weryfikować je po stronie serwera.
+
+4.
+Multer sprawdza typ MIME, ale nie ogranicza wielkości uploadowanego pliku.
+Użytkownik może przesłać bardzo duży plik audio, który zostanie w całości załadowany do pamięci RAM przez `memoryStorage()`. Najlepiej po prostu ustawić jakiś max limit.
+
+5.
+W wielu miejscach sprawdzana jest jedynie obecność wartości.
+- tempo może być liczbą ujemną,
+- tempo może mieć absurdalnie wysoką wartość,
+- pola tekstowe nie mają ograniczeń długości.
+Takie dane mogą zostać zapisane w bazie i powodować błędy lub niepoprawne działanie aplikacji.
+Warto by dodać walidację zakresów liczbowych oraz maksymalnych długości pól tekstowych.
+
+
+6.
+Przycisk wylogowania usuwa jedynie cookie:
+
+`res.cookie(SESSION_COOKIE, "", { maxAge: 0 })`
+
+Natomiast rekord sesji pozostaje w tabeli `session`.
+Po prostu warto by je usunąć także.
+
+7.
+Cookie posiada czas życia jednego tygodnia, ale rekordy w tabeli `session` nigdy nie wygasają.
+
+Jeżeli ktoś uzyska identyfikator sesji, będzie ona ważna tak długo, jak długo rekord istnieje w bazie.
+Podobny problem co z 6.

@@ -1,0 +1,18 @@
+# Feedback checklist
+- [X] Lepsze README ze ścieżkami
+- [ ] Niewyrównane pola w formularzach
+- [ ] Przedawnione moduły `npm`
+- [ ] Mylące rozszerzenie `.js` dla `generate_env` (!)
+- [ ] Powtórzenia stałej `SESSION_COOKIE`
+---
+- [ ] Błąd w `INSERT` w pliku `sample.js` (!)
+- [ ] Błąd w `sample.insert.run(...)` w `populate.js`
+- [ ] Błąd `readBigInt64BE()` w `session.js`
+- [ ] Złe użycie `GET` zamiast `POST` w `/samples/:id/delete`
+- [ ] Dodanie wersji node do `README.md` i informacji o Linux
+---
+- [ ] Dodanie mechanizmów CSRF
+- [ ] Max limit dla pliku w mutler
+- [ ] Więcej walidacji danych w skryptach
+- [ ] Usunąć record z tabeli session po wylogowaniu
+- [ ] Dodać wygasanie recordów z tabeli session

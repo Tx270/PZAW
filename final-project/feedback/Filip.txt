@@ -1,0 +1,15 @@
+Na początku mówie, że błędy mogą wychodzić z powodu, że odpalałem to na windowsie
+
+1. Największy problem znajduje się w modelu sample.js. Schemat tabeli samples tworzy kolumnę file, ale zapytanie INSERT próbuje zapisywać dane do kolumn data i mimetype. Przez to projekt może nie uruchamiać się poprawnie i pojawia się błąd, że tabela samples nie ma kolumny data. Schemat bazy danych powinien być zgodny z tym, czego używa kod.
+
+2. Problem występuje również w pliku populate.js. Funkcja dodająca sample wywołuje sample.insert.run(...) z inną liczbą argumentów niż oczekuje zapytanie INSERT. To może powodować błędy podczas wypełniania bazy przykładowymi danymi.
+
+3. Kolejna rzecz do poprawy to plik generate_env.js. Mimo rozszerzenia .js jest to tak naprawdę skrypt bash. Powoduje to u mnie problemy na Windowsie. Lepszym rozwiązaniem byłoby zmienienie nazwy na generate_env.sh albo przygotowanie wersji działającej również na Windowsie.
+
+4. W session.js identyfikator sesji jest generowany jako bardzo duża liczba przy użyciu readBigInt64BE(). Może to powodować błąd RangeError, ponieważ taka wartość nie zawsze dobrze współpracuje z JavaScriptem i SQLite. Bezpieczniej byłoby przechowywać identyfikator sesji jako tekst albo generować mniejszą wartość liczbową(Ja dostawałem błąd zmieniłem to tak: let sessionId = randomBytes(6).readUIntBE(0, 6);).
+
+5.Usuwanie sampli odbywa się metodą GET pod adresem /samples/:id/delete. Aplikacja może działać, ale zgodnie z dobrymi praktykami GET powinien służyć do pobierania danych, a nie do ich usuwania. Lepszym rozwiązaniem byłoby użycie formularza POST
+
+6. Podoma mi się że README jest czytelne i opisuje instalację, uruchamianie, dostępne ścieżki oraz konta testowe. Można jednak dodać dokładniejszą informację o wymaganej wersji Node.js, o problemach z uruchamianiem na Windowsie oraz o tym, że projekt najlepiej działa w środowisku Linux, Git Bash albo WSL.
+
+Podsumowując projekt jest dobry, fajnie by było jakby był łatwiejszy do oceny przeze mnie na winodwise dużo rzeczy musiałem maunalnie zrobic albo zmienic żeby go ocenić. Tak to wszustko superancko pico bello.
