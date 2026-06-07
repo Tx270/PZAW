@@ -12,7 +12,7 @@
 - [X] Dodanie wersji node do `README.md` i informacji o Linux
 ---
 - [ ] Dodanie mechanizmów CSRF
-- [ ] Max limit dla pliku w mutler
-- [ ] Więcej walidacji danych w skryptach
-- [ ] Usunąć record z tabeli session po wylogowaniu
-- [ ] Dodać wygasanie recordów z tabeli session
+- [X] Max limit dla pliku w mutler
+- [X] Więcej walidacji danych w skryptach
+- [X] Usunąć record z tabeli session po wylogowaniu
+- [X] Dodać wygasanie recordów z tabeli session

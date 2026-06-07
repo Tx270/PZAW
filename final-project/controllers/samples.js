@@ -5,12 +5,13 @@ import user from "../models/user.js";
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
   fileFilter: (req, file, cb) => {
     const allowedMimetypes = ["audio/mpeg", "audio/wav", "audio/ogg"];
     if (allowedMimetypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Invalid file type. Only MP3, WAV, and OGG are allowed."), false);
+      cb(new Error("Invalid file type. Only MP3, WAV, and OGG smaller than 50 MB are allowed."), false);
     }
   },
 });
@@ -101,11 +102,29 @@ function upload_post(req, res) {
   if (!name || !author || !key || !tempo || !req.file) {
     return res.render("upload", { error: "Missing required fields" });
   }
+
+  const tempoNum = parseInt(tempo);
+  if (isNaN(tempoNum) || tempoNum < 40 || tempoNum > 300) {
+    return res.render("upload", { error: "Tempo must be a number between 40 and 300." });
+  }
+  if (name.length > 100) {
+    return res.render("upload", { error: "Name must be 100 characters or less." });
+  }
+  if (author.length > 100) {
+    return res.render("upload", { error: "Author must be 100 characters or less." });
+  }
+  if (key.length > 10) {
+    return res.render("upload", { error: "Key must be 10 characters or less." });
+  }
+  if (description && description.length > 500) {
+    return res.render("upload", { error: "Description must be 500 characters or less." });
+  }
+
   sample.insert.run(
     name,
     author,
     key,
-    parseInt(tempo),
+    tempoNum,
     description || null,
     req.file.buffer,
     req.file.mimetype,
@@ -134,11 +153,29 @@ function edit_post(req, res) {
   if (!name || !author || !key || !tempo) {
     return res.status(400).send("Missing required fields");
   }
+
+  const tempoNum = parseInt(tempo);
+  if (isNaN(tempoNum) || tempoNum < 40 || tempoNum > 300) {
+    return res.status(400).send("Tempo must be a number between 40 and 300.");
+  }
+  if (name.length > 100) {
+    return res.status(400).send("Name must be 100 characters or less.");
+  }
+  if (author.length > 100) {
+    return res.status(400).send("Author must be 100 characters or less.");
+  }
+  if (key.length > 10) {
+    return res.status(400).send("Key must be 10 characters or less.");
+  }
+  if (description && description.length > 500) {
+    return res.status(400).send("Description must be 500 characters or less.");
+  }
+
   sample.update.run(
     name,
     author,
     key,
-    parseInt(tempo),
+    tempoNum,
     description || null,
     s.id
   );

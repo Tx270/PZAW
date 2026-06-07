@@ -23,6 +23,9 @@ const db_ops = {
   get_session: db.prepare(
     "SELECT session_id, user_id, created_at from session WHERE session_id = ?;"
   ),
+  delete_session: db.prepare(
+    "DELETE FROM session WHERE session_id = ?;"
+  ),
 };
 
 function createSession(user, res) {
@@ -49,7 +52,13 @@ function sessionHandler(req, res, next) {
     }
   }
 
-  if (sessionId != null) session = db_ops.get_session.get(sessionId);
+  if (sessionId != null) {
+    session = db_ops.get_session.get(sessionId);
+    if (session && Number(session.created_at) + ONE_WEEK < Date.now()) {
+      db_ops.delete_session.run(sessionId);
+      session = null;
+    }
+  }
 
   if (session != null) {
     res.locals.session = session;
@@ -63,10 +72,21 @@ function sessionHandler(req, res, next) {
     session = createSession(null, res);
   }
 
+  // cleanup session table sometimes
+  if (Math.random() < 0.01) {
+    db.exec(`DELETE FROM session WHERE created_at + ${ONE_WEEK} < ${Date.now()};`);
+  }
+
   next();
+}
+
+function deleteSession(sessionId) {
+  db_ops.delete_session.run(sessionId);
 }
 
 export default {
   createSession,
   sessionHandler,
+  deleteSession,
 };
+

@@ -45,8 +45,13 @@ export async function signup_post(req, res) {
     return res.render("auth_signup", { error: "Passwords do not match." });
   }
 
-  if (password.length < 8) {
-    return res.render("auth_signup", { error: "Password must be at least 8 characters." });
+  const usernameRegex = /^[a-zA-Z0-9]+$/;
+  if (username.length < 3 || username.length > 20 || !usernameRegex.test(username)) {
+    return res.render("auth_signup", { error: "Username must be 3-20 alphanumeric characters." });
+  }
+
+  if (password.length < 8 || password.length > 100) {
+    return res.render("auth_signup", { error: "Password must be 8-100 characters." });
   }
 
   const new_user = await user.createUser(username, password);
@@ -59,7 +64,11 @@ export async function signup_post(req, res) {
   res.redirect("/");
 }
 
-export function logout(_req, res) {
+export function logout(req, res) {
+  const sessionId = req.cookies[SESSION_COOKIE];
+  if (sessionId) {
+    session.deleteSession(sessionId);
+  }
   res.cookie(SESSION_COOKIE, "", { maxAge: 0, httpOnly: true, secure: true });
   res.redirect("/auth/login");
 }
