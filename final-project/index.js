@@ -53,7 +53,7 @@ samplesRouter.post("/upload", (req, res, next) => {
 samplesRouter.get("/:id", samples.sample_get);
 samplesRouter.get("/:id/play", samples.play_get);
 samplesRouter.get("/:id/download", samples.download_get);
-samplesRouter.get("/:id/delete", samples.delete_get);
+samplesRouter.post("/:id/delete", samples.delete_post);
 samplesRouter.get("/:id/edit", samples.edit_get);
 samplesRouter.post("/:id/edit", samples.edit_post);
 app.use("/samples", samplesRouter);

@@ -4,7 +4,8 @@ Aplikacja to prosty model strony do rozpowszechniania darmowych sampli muzycznyc
 
 ## Wymagania
 
-Projekt należy uruchomić w środowisku `linux` z `nodejs` i `npm`.
+Projekt należy uruchomić w środowisku z `nodejs` >= `v26.2.0` oraz `npm` >= `11.16.0`.
+W tej chwili projekt należy uruchamiać tylko w środowisku `linux` z uwagi na skrypt `generate_env`.
 
 ## Instalacja
 

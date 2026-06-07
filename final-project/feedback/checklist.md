@@ -5,11 +5,11 @@
 - [ ] Mylące rozszerzenie `.js` dla `generate_env` (!)
 - [ ] Powtórzenia stałej `SESSION_COOKIE`
 ---
-- [ ] Błąd w `INSERT` w pliku `sample.js` (!)
-- [ ] Błąd w `sample.insert.run(...)` w `populate.js`
-- [ ] Błąd `readBigInt64BE()` w `session.js`
-- [ ] Złe użycie `GET` zamiast `POST` w `/samples/:id/delete`
-- [ ] Dodanie wersji node do `README.md` i informacji o Linux
+- [X] Błąd w `INSERT` w pliku `sample.js` (!)
+- [X] Błąd w `sample.insert.run(...)` w `populate.js`
+- [X] Błąd `readBigInt64BE()` w `session.js`
+- [X] Złe użycie `GET` zamiast `POST` w `/samples/:id/delete`
+- [X] Dodanie wersji node do `README.md` i informacji o Linux
 ---
 - [ ] Dodanie mechanizmów CSRF
 - [ ] Max limit dla pliku w mutler

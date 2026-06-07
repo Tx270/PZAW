@@ -114,7 +114,7 @@ function upload_post(req, res) {
   res.redirect("/samples");
 }
 
-function delete_get(req, res) {
+function delete_post(req, res) {
   const s = requireOwner(req, res);
   if (!s) return;
   sample.delete.run(s.id);
@@ -153,7 +153,7 @@ export default {
   random_get,
   play_get,
   download_get,
-  delete_get,
+  delete_post,
   edit_get,
   edit_post,
   upload,

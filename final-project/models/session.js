@@ -26,7 +26,7 @@ const db_ops = {
 };
 
 function createSession(user, res) {
-  let sessionId = randomBytes(8).readBigInt64BE();
+  let sessionId = randomBytes(6).readUIntBE(0, 6);
   let createdAt = Date.now();
 
   let session = db_ops.create_session.get(sessionId, user, createdAt);
@@ -46,8 +46,6 @@ function sessionHandler(req, res, next) {
   if (sessionId != null) {
     if (!sessionId.match(/^-?[0-9]+$/)) {
       sessionId = null;
-    } else {
-      sessionId = BigInt(sessionId);
     }
   }
 

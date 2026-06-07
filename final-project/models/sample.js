@@ -14,6 +14,8 @@ db.exec(`
     created_at  TEXT NOT NULL,
     file        TEXT,
     user_id     INTEGER,
+    data        BLOB,
+    mimetype    TEXT,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
   ) STRICT;
 `);
