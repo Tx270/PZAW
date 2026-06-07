@@ -1,5 +1,17 @@
-#!/usr/bin/env bash
+import fs from 'fs';
+import crypto from 'crypto';
 
-echo PORT=8000
-echo SECRET=\"$(cat /dev/random | tr -cd "[:graph:]" | head -c64)\"
-echo PEPPER=\"$(cat /dev/random | tr -cd "[:xdigit:]" | head -c64)\"
+const secret = crypto.randomBytes(48).toString('base64')
+  .replace(/\+/g, '-')
+  .replace(/\//g, '_')
+  .substring(0, 64);
+
+const pepper = crypto.randomBytes(32).toString('hex');
+
+const envContent = `PORT=8000
+SECRET="${secret}"
+PEPPER="${pepper}"
+`;
+
+fs.writeFileSync('.env', envContent);
+console.log('.env file generated successfully!');

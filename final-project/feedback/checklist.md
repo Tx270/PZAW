@@ -2,7 +2,7 @@
 - [X] Lepsze README ze ścieżkami
 - [X] Niewyrównane pola w formularzach
 - [X] Przedawnione moduły `npm`
-- [ ] Mylące rozszerzenie `.js` dla `generate_env` (!)
+- [X] Mylące rozszerzenie `.js` dla `generate_env` (!)
 - [X] Powtórzenia stałej `SESSION_COOKIE`
 ---
 - [X] Błąd w `INSERT` w pliku `sample.js` (!)
