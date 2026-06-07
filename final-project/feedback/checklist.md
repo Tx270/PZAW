@@ -1,9 +1,9 @@
 # Feedback checklist
 - [X] Lepsze README ze ścieżkami
-- [ ] Niewyrównane pola w formularzach
-- [ ] Przedawnione moduły `npm`
+- [X] Niewyrównane pola w formularzach
+- [X] Przedawnione moduły `npm`
 - [ ] Mylące rozszerzenie `.js` dla `generate_env` (!)
-- [ ] Powtórzenia stałej `SESSION_COOKIE`
+- [X] Powtórzenia stałej `SESSION_COOKIE`
 ---
 - [X] Błąd w `INSERT` w pliku `sample.js` (!)
 - [X] Błąd w `sample.insert.run(...)` w `populate.js`

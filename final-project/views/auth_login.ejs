@@ -1,25 +1,35 @@
-<div class="auth-container">
-  <h1>Log in</h1>
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card p-4 shadow">
+      <div class="card-body">
+        <h1 class="card-title text-center mb-4">Log in</h1>
 
-  <% if (error) { %>
-    <p class="error"><%= error %></p>
-  <% } %>
+        <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+        <% } %>
 
-  <form method="POST" action="/auth/login">
-    <div class="field">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" autocomplete="username" required />
+        <form method="POST" action="/auth/login">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" class="form-control" autocomplete="username" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" required />
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Log in</button>
+          </div>
+        </form>
+
+        <p class="text-center mt-3">
+          Don't have an account? <a href="/auth/signup">Sign up</a>
+        </p>
+      </div>
     </div>
-
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" autocomplete="current-password" required />
-    </div>
-
-    <button type="submit">Log in</button>
-  </form>
-
-  <p class="auth-switch">
-    Don't have an account? <a href="/auth/signup">Sign up</a>
-  </p>
+  </div>
 </div>

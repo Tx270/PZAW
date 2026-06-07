@@ -1,7 +1,5 @@
 import user from "../models/user.js";
-import session from "../models/session.js";
-
-const SESSION_COOKIE = "__Host-ryba";
+import session, { SESSION_COOKIE } from "../models/session.js";
 
 export function login_get(req, res) {
   if (res.locals.session?.user_id != null) {

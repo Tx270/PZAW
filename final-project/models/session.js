@@ -4,7 +4,7 @@ import { randomBytes } from "node:crypto";
 const db_path = "./database.sqlite";
 const db = new DatabaseSync(db_path, { readBigInts: true });
 
-const SESSION_COOKIE = "__Host-ryba";
+export const SESSION_COOKIE = "__Host-ryba";
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 db.exec(`
@@ -88,5 +88,6 @@ export default {
   createSession,
   sessionHandler,
   deleteSession,
+  SESSION_COOKIE,
 };
 
