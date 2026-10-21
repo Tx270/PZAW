@@ -8,11 +8,11 @@ import mars from './assets/mars.png'
 import dragon from './assets/dragon.png'
 import animals from './assets/animals.png'
 import name from './assets/name.png'
-import './App.css'
 
 
 var movies: MovieProps[] = [
   { poster: wolf, title: "The Wolf of Wall Street", year: 2013, rating: 8.0 },
+  { poster: airplane, title: "Airplane!", year: 1980, rating: 8.6 },
   { poster: airplane, title: "Airplane!", year: 1980, rating: 8.6 },
   { poster: name, title: "Call Me by Your Name", year: 2017, rating: 8.4 },
   { poster: rocky, title: "The Rocky Horror Picture Show", year: 1975, rating: 8.2 },
@@ -57,7 +57,7 @@ var albums: AlbumProps[] = [
   },
   {
     cover: dragon,
-    title: "yes",
+    title: "Test",
     artist: "yes",
     genre: "yesy",
     year: 2000,
@@ -73,14 +73,18 @@ interface MovieProps {
 
 function Movie({ poster, title, year, rating }: MovieProps) {
   return (
-    <div style={{ border: '1px solid red' }}>
-      {rating > 8.5 ? <p>Recomended!</p> : null}
-      <img src={poster} alt="Poster" />
-      <h1>{title}</h1>
-      <h4>Release: {year}</h4>
-      <h4>Rating: {rating}</h4>
+    <div className="col-12 col-md-6 col-lg-4">
+      <div className="card h-100 shadow">
+        {rating > 8.5 ? (<b style={{ position: "absolute", left: "40%", top: "10px" }}>Recommended!</b>) : null}
+        <img className="card-img-top" style={{ width: "100%", height: "600px", objectFit: "cover" }} src={poster} alt="Poster" />
+        <div className="card-body">
+          <h3 className="card-title">{title}</h3>
+          <p className="card-text">Release: {year}</p>
+          <p className="card-text">Rating: {rating}</p>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
 interface BookProps {
@@ -92,14 +96,18 @@ interface BookProps {
 
 function Book({ cover, title, year, pages }: BookProps) {
   return (
-    <div style={{ border: '1px solid red' }}>
-      {year < 2000 ? <p>Classic</p> : null}
-      <img src={cover} alt="Cover" />
-      <h1>{title}</h1>
-      <h4>Release: {year}</h4>
-      <h4>Num. of pages: {pages}</h4>
+    <div className="col-12 col-md-6 col-lg-4">
+      <div className="card h-100 shadow">
+        {year < 2000 ? (<b style={{ position: "absolute", left: "40%", top: "10px" }}>Classic</b>) : null}
+        <img className="card-img-top" style={{ width: "100%", height: "600px", objectFit: "cover" }} src={cover} alt="Cover" />
+        <div className="card-body">
+          <h3 className="card-title">{title}</h3>
+          <p className="card-text">Release: {year}</p>
+          <p className="card-text">Num. of pages: {pages}</p>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
 interface TrackProps {
@@ -110,9 +118,10 @@ interface TrackProps {
 
 function Track({ index, title, duration }: TrackProps) {
   return (
-    <li key={index}>
-      {title} - {duration}
-    </li>
+    <tr key={index}>
+      <td scope="row">{title}</td>
+      <td className="text-end">{duration}</td>
+    </tr>
   )
 }
 
@@ -125,18 +134,57 @@ interface AlbumProps {
   tracklist?: TrackProps[];
 }
 
-function Album({ cover, title, artist, year, tracklist }: AlbumProps) {
+function Album({ cover, title, artist, year, genre, tracklist }: AlbumProps) {
   return (
-    <div style={{ border: '1px solid red' }}>
-      <img src={cover} alt="Cover" />
-      <h1>{title}</h1>
-      <h4>Artist: {artist}</h4>
-      <h4>Release: {year}</h4>
-      <ul>
-        {tracklist != undefined ? tracklist.map((track, index) => (
-          <Track index={track.index ?? index} title={track.title} duration={track.duration} />
-        )) : <h5>No tracks</h5>}
-      </ul>
+    <div className="col-12 col-md-6 col-lg-4">
+      <div className="card h-100 shadow">
+        <img className="card-img-top" style={{ width: "100%", objectFit: "cover" }} src={cover} alt="Cover" />
+        <div className="card-body">
+          <h3 className="card-title">{title}</h3>
+          <h5 className="card-text">{artist}</h5>
+          <p className="card-text">{year} / {genre}</p>
+
+          {tracklist != undefined ? (
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tracklist.map((track, index) => (
+                  <Track key={track.index ?? index} index={track.index ?? index} title={track.title} duration={track.duration}
+                  />
+                ))}
+              </tbody>
+            </table>
+          ) : (<div className="alert alert-light" role="alert"> No songs </div>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface CardProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+function Card({ title, children }: CardProps) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="card m-4 shadow">
+      <h2 className="card-header" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? "▾" : "▸"} {title}
+      </h2>
+
+      {isOpen && (
+        <div className="card-body row g-3">
+          {children}
+        </div>
+      )}
     </div>
   )
 }
@@ -147,29 +195,41 @@ function App() {
   const sortedAlbums = [...albums].sort((a, b) => (b.tracklist ? b.tracklist.length : 0) - (a.tracklist ? a.tracklist.length : 0));
 
   return (
-    <>
-      {sortedMovies.filter(movie => movie.year <= 2010).map((movie, index) => (
-        <Movie key={index} {...movie} />
-      ))}
-      
-      {sortedMovies.filter(movie => movie.year > 2010).map((movie, index) => (
-        <Movie key={index} {...movie} />
-      ))}
+    <main className="container p-5">
+      <Card title="Old Movies">
+        {sortedMovies.filter(movie => movie.year <= 2010).map((movie, index) => (
+          <Movie key={index} {...movie} />
+        ))}
+      </Card>
 
-      {books.map((book, index) => (
-        <Book key={index} {...book} />
-      ))}
+      <Card title="New Movies">
+        {sortedMovies.filter(movie => movie.year > 2010).map((movie, index) => (
+          <Movie key={index} {...movie} />
+        ))}
+      </Card>
 
-      {albums.map((album, index) => (
-        <Album key={index} {...album} />
-      ))}
+      <Card title="Books">
+        {books.map((book, index) => (
+          <Book key={index} {...book} />
+        ))}
+      </Card>
 
-      {sortedBooks.map((book, index) => (
-        <Book key={index} {...book} />
-      ))}
+      <Card title="Albums">
+        {albums.map((album, index) => (
+          <Album key={index} {...album} />
+        ))}
+      </Card>
 
-      <Album {...sortedAlbums[0]} />
-    </>
+      <Card title="Sorted Books">
+        {sortedBooks.map((book, index) => (
+          <Book key={index} {...book} />
+        ))}
+      </Card>
+
+      <Card title="Longest Album">
+        <Album {...sortedAlbums[0]} />
+      </Card>
+    </main>
   );
 }
 
