@@ -64,6 +64,15 @@ var albums: AlbumProps[] = [
   },
 ];
 
+function handleMovieClick(event: React.MouseEvent<HTMLElement>) {
+  console.log("Wybrano film " + event.currentTarget.querySelector(".card-title")?.textContent);
+}
+
+function handleMovieDetailsClick(event: React.MouseEvent<HTMLButtonElement>) {
+  console.log("Kliknięto pokaż szczegóły dla filmu " + event.currentTarget.parentElement?.querySelector(".card-title")?.textContent);
+  event.stopPropagation();
+}
+
 interface MovieProps {
   poster: string;
   title: string;
@@ -74,13 +83,14 @@ interface MovieProps {
 function Movie({ poster, title, year, rating }: MovieProps) {
   return (
     <div className="col-12 col-md-6 col-lg-4">
-      <div className="card h-100 shadow">
+      <div className="card h-100 shadow" onClick={handleMovieClick}>
         {rating > 8.5 ? (<b style={{ position: "absolute", left: "40%", top: "10px" }}>Recommended!</b>) : null}
         <img className="card-img-top" style={{ width: "100%", height: "600px", objectFit: "cover" }} src={poster} alt="Poster" />
         <div className="card-body">
           <h3 className="card-title">{title}</h3>
           <p className="card-text">Release: {year}</p>
           <p className="card-text">Rating: {rating}</p>
+          <button className="primary-button" onClick={handleMovieDetailsClick}>Pokaż szczegóły</button>
         </div>
       </div>
     </div>
