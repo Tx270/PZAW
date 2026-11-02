@@ -90,7 +90,7 @@ function Movie({ poster, title, year, rating }: MovieProps) {
           <h3 className="card-title">{title}</h3>
           <p className="card-text">Release: {year}</p>
           <p className="card-text">Rating: {rating}</p>
-          <button className="primary-button" onClick={handleMovieDetailsClick}>Pokaż szczegóły</button>
+          <button className="btn btn-secondary" onClick={handleMovieDetailsClick}>Pokaż szczegóły</button>
         </div>
       </div>
     </div>
@@ -120,6 +120,10 @@ function Book({ cover, title, year, pages }: BookProps) {
   );
 }
 
+function handleSongClick(event: React.MouseEvent<HTMLTableRowElement>, title: string) {
+  console.log("Wybrano utwór " + title + " z albumu " + event.currentTarget.parentElement?.parentElement?.parentElement.querySelector(".card-title")?.textContent);
+}
+
 interface TrackProps {
   index?: number;
   title: string;
@@ -128,7 +132,7 @@ interface TrackProps {
 
 function Track({ index, title, duration }: TrackProps) {
   return (
-    <tr key={index}>
+    <tr key={index} onClick={(event) => {handleSongClick(event, title)}}>
       <td scope="row">{title}</td>
       <td className="text-end">{duration}</td>
     </tr>
