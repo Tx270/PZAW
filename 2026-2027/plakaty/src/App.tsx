@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import wolf from './assets/wolf.png'
 import airplane from './assets/airplane.png'
 import rocky from './assets/rocky.png'
@@ -12,7 +12,6 @@ import name from './assets/name.png'
 
 var movies: MovieProps[] = [
   { poster: wolf, title: "The Wolf of Wall Street", year: 2013, rating: 8.0 },
-  { poster: airplane, title: "Airplane!", year: 1980, rating: 8.6 },
   { poster: airplane, title: "Airplane!", year: 1980, rating: 8.6 },
   { poster: name, title: "Call Me by Your Name", year: 2017, rating: 8.4 },
   { poster: rocky, title: "The Rocky Horror Picture Show", year: 1975, rating: 8.2 },
@@ -121,7 +120,7 @@ function Book({ cover, title, year, pages }: BookProps) {
 }
 
 function handleSongClick(event: React.MouseEvent<HTMLTableRowElement>, title: string) {
-  console.log("Wybrano utwór " + title + " z albumu " + event.currentTarget.parentElement?.parentElement?.parentElement.querySelector(".card-title")?.textContent);
+  console.log("Wybrano utwór " + title + " z albumu " + event.currentTarget?.parentElement?.parentElement?.parentElement?.querySelector(".card-title")?.textContent);
 }
 
 interface TrackProps {
@@ -180,6 +179,11 @@ function Album({ cover, title, artist, year, genre, tracklist }: AlbumProps) {
   );
 }
 
+function handleFilter(event: React.ChangeEvent<HTMLInputElement>, setFilter: Function) {
+  if (event.target.value) console.log(event.target.value);
+  setFilter(event.target.value);
+}
+
 interface CardProps {
   title: string;
   children: React.ReactNode;
@@ -187,16 +191,26 @@ interface CardProps {
 
 function Card({ title, children }: CardProps) {
   const [isOpen, setIsOpen] = useState(true);
+  const [filter, setFilter] = useState("");
+
+  const filteredChildren = React.Children.toArray(children).filter(child => {
+    if (!React.isValidElement(child)) return true;
+    return String(child.props.title ?? "").toLowerCase().includes(filter.toLowerCase());
+  });
+
 
   return (
     <div className="card m-4 shadow">
       <h2 className="card-header" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? "▾" : "▸"} {title}
+      <input type="text" className="form-control" placeholder="Wpisz tytuł" onClick={(e) => {e.stopPropagation()}} onChange={(e) => {handleFilter(e, setFilter)}} />
       </h2>
-
       {isOpen && (
         <div className="card-body row g-3">
-          {children}
+          {filteredChildren.length > 0
+            ? filteredChildren
+            : <p>Nie znaleziono filmów</p>
+          }
         </div>
       )}
     </div>
@@ -204,20 +218,22 @@ function Card({ title, children }: CardProps) {
 }
 
 function App() {
-  const sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
+  movies.sort((a, b) => a.title.localeCompare(b.title));
+  books.sort((a, b) => a.title.localeCompare(b.title));
+  albums.sort((a, b) => a.title.localeCompare(b.title));
   const sortedBooks = [...books].sort((a, b) => b.year - a.year);
   const sortedAlbums = [...albums].sort((a, b) => (b.tracklist ? b.tracklist.length : 0) - (a.tracklist ? a.tracklist.length : 0));
 
   return (
     <main className="container p-5">
       <Card title="Old Movies">
-        {sortedMovies.filter(movie => movie.year <= 2010).map((movie, index) => (
+        {movies.filter(movie => movie.year <= 2010).map((movie, index) => (
           <Movie key={index} {...movie} />
         ))}
       </Card>
 
       <Card title="New Movies">
-        {sortedMovies.filter(movie => movie.year > 2010).map((movie, index) => (
+        {movies.filter(movie => movie.year > 2010).map((movie, index) => (
           <Movie key={index} {...movie} />
         ))}
       </Card>
